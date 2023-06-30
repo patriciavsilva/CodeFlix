@@ -1,7 +1,7 @@
 import { Box, ThemeProvider, Typography } from "@mui/material"
 import Header from "./components/Header"
 import Layout from "./components/Layout"
-import { appTheme } from "./config/theme"
+import { darkTheme } from "./config/theme"
 import { Routes, Route } from "react-router-dom"
 import CategoryList from "./features/categories/ListCategory"
 import CategoryCreate from "./features/categories/CreateCategory"
@@ -9,7 +9,7 @@ import CategoryEdit from "./features/categories/EditCategory"
 
 function App() {
   return (
-    <ThemeProvider theme={appTheme}>
+    <ThemeProvider theme={darkTheme}>
       <Box
         component={"main"}
         sx={{
