@@ -1,18 +1,25 @@
+import DeleteIcon from "@mui/icons-material/Delete"
 import { Box, Button, IconButton, Typography } from "@mui/material"
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowsProp,
+  GridToolbar,
+} from "@mui/x-data-grid"
 import { Link } from "react-router-dom"
 import { useAppSelector } from "../../app/hooks"
 import { selectCategories } from "./categorySlice"
-import DeleteIcon from "@mui/icons-material/Delete"
-import {
-  DataGrid,
-  GridRowsProp,
-  GridColDef,
-  GridRenderCellParams,
-  GridToolbar,
-} from "@mui/x-data-grid"
 
 export default function CategoryList() {
   const categories = useAppSelector(selectCategories)
+
+  const slotProps = {
+    toolbar: {
+      showQuickFilter: true,
+      quickFilterProps: { debounceMs: 500 },
+    },
+  }
 
   const rows: GridRowsProp = categories.map((category) => ({
     id: category.id,
@@ -27,6 +34,7 @@ export default function CategoryList() {
       field: "name",
       headerName: "Name",
       flex: 1,
+      renderCell: renderNameCell,
     },
     {
       field: "is_Active",
@@ -68,6 +76,17 @@ export default function CategoryList() {
     )
   }
 
+  function renderNameCell(rowData: GridRenderCellParams) {
+    return (
+      <Link
+        style={{ textDecoration: "none" }}
+        to={`/categories/edit/${rowData.id}`}
+      >
+        <Typography color="primary">{rowData.value}</Typography>
+      </Link>
+    )
+  }
+
   return (
     <Box maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Box display="flex" justifyContent="flex-end">
@@ -81,24 +100,18 @@ export default function CategoryList() {
           New Category
         </Button>
       </Box>
-      <div>
+      <Box display={"flex"}>
         <DataGrid
           components={{ Toolbar: GridToolbar }}
-          slotProps={{
-            toolbar: {
-              showQuickFilter: true,
-              quickFilterProps: { debounceMs: 500 },
-            },
-          }}
+          slotProps={slotProps}
           rows={rows}
           columns={columns}
           disableColumnSelector={true}
           disableColumnFilter={true}
           disableDensitySelector={true}
           disableRowSelectionOnClick={true}
-          pageSizeOptions={[2, 10, 15, 25]}
         />
-      </div>
+      </Box>
     </Box>
   )
 }
